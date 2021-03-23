@@ -1,0 +1,473 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.3.2 effective-4.2 (swiftlang-1200.0.45 clang-1200.0.32.28)
+// swift-module-flags: -target x86_64-apple-ios10.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 4.2 -enforce-exclusivity=checked -O -module-name MyFramework
+import AVFoundation
+import AudioToolbox
+import Compression
+import CoreFoundation
+import Foundation
+import MLKit
+@_exported import MyFramework
+import Swift
+import SystemConfiguration
+import UIKit
+@_hasMissingDesignatedInitializers open class IDValidationResponse {
+  open func getRawJsonString() -> Swift.String
+  open func getFullDataRawJsonString() -> Swift.String
+  open func getRequestSucceeded() -> Swift.Bool
+  open func getSmileJobID() -> Swift.String
+  open func getPartnerParams() -> MyFramework.PartnerParams
+  open func getResultType() -> Swift.String
+  open func getResultText() -> Swift.String
+  open func getResultCode() -> Swift.Int
+  open func getActions() -> [Swift.String : Any]
+  open func getCountry() -> Swift.String
+  open func getIDType() -> Swift.String
+  open func getIDNumber() -> Swift.String
+  open func getExpirationDate() -> Swift.String
+  open func getFullName() -> Swift.String
+  open func getDOB() -> Swift.String
+  open func getPhoto() -> Swift.String
+  open func getPhoneNumber() -> Swift.String
+  open func getGender() -> Swift.String
+  open func getAddress() -> Swift.String
+  open func getSource() -> Swift.String
+  open func getSecKey() -> Swift.String
+  open func getTimeStamp() -> Swift.Int64
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class FaceState {
+  public static let NO_FACE_FOUND: Swift.Int
+  public static let DO_MOVE_CLOSER: Swift.Int
+  public static let DO_SMILE: Swift.Int
+  public static let CAPTURING: Swift.Int
+  @objc deinit
+}
+public protocol SIDNetworkRequestDelegate {
+  func onStartJobStatus()
+  func onEndJobStatus()
+  func onUpdateJobProgress(progress: Swift.Int)
+  func onUpdateJobStatus(msg: Swift.String)
+  func onAuthenticated(sidResponse: MyFramework.SIDResponse)
+  func onEnrolled(sidResponse: MyFramework.SIDResponse)
+  func onComplete()
+  func onError(sidError: MyFramework.SIDError)
+  func onIdValidated(idValidationResponse: MyFramework.IDValidationResponse)
+}
+public enum SIDError : Swift.Error {
+  case COULD_NOT_INITIALIZE_CAMERA
+  case NO_FRONT_FACING_CAMERA_AVAILABLE
+  case NO_BACK_FACING_CAMERA_AVAILABLE
+  case ID_CARD_CAPTURE_FAILED
+  case ID_CARD_PICTURE_CALLBACK_FAILED
+  case ID_CARD_AUTOFOCUS_FAILED
+  case ID_CARD_TOUCHFOCUS_FAILED
+  case ID_CARD_DRAWVIEW_FAILED
+  case ID_CARD_CAMERA_INITIALIZATION_FAILED
+  case UNABLE_TO_SUBMIT
+  case UNABLE_TO_SUBMIT_PACKAGING_ERROR
+  case UNABLE_TO_SUBMIT_COULD_NOT_UPLOAD_ZIP
+  case UNABLE_TO_SUBMIT_COULD_NOT_CREATE_ZIP
+  case UNABLE_TO_SUBMIT_COULD_NOT_TRANSMIT_TO_LAMBDA
+  case UNABLE_TO_SUBMIT_COULD_NOT_AUTH
+  case AUTH_SMILE_REQUEST_FAILED
+  case AUTH_SMILE_REQUEST_FAILED_UNABLE_TO_PARSE_RESPONSE
+  case UNABLE_TO_VERIFY
+  case REQUEST_FAILED_TRY_AGAIN
+  case FAILED_JOB_STATUS_CANCELLED_OR_TIMEOUT_AUTH
+  case FAILED_JOB_STATUS_CANCELLED_OR_TIMEOUT
+  case PREVIOUS_ENROLL_FAILED
+  case DATA_PACKAGING_FAILED
+  case ENROLL_FAILED
+  case DATA_PACKAGING_FAILED_AUTH_BEFORE_ENROLL
+  case NO_IMAGE_FOUND
+  case ID_CARD_REQUIRED
+  case ENROLL_NOT_FOUND
+  case ERROR_UNKNOWN
+  case UNABLE_TO_SUBMIT_TRY_AGAIN
+  case TAG_NOT_FOUND
+  case NETWORK_DATA_NOT_VALID
+  case NO_NETWORK_CONNECTION
+  case NO_USER_ID_FOUND_PLEASE_ENROLL_FIRST
+  case UNABLE_TO_ENROLL_OR_AUTH
+  case UNABLE_TO_CAPTURE_SELFIE_FRAME_IMAGE
+  case UNABLE_TO_CAPTURE_SELFIE_PREVIEW_IMAGE
+  case UNABLE_TO_CREATE_SELFIE_PREVIEW_UI_IMAGE
+  case UNABLE_TO_CAPTURE_ID_CARD_IMAGE
+  case UNABLE_TO_CAPTURE_ID_CARD_FACE_IMAGE
+  case UNABLE_TO_BATCH_NEEDS_TO_BE_ENROLL_MODE
+  case UNABLE_TO_SUBMIT_UPLOAD_LINK_NOT_RECEIVED
+  case UNABLE_TO_SUBMIT_PREUPLOAD_UNABLE_TO_PARSE_RESPONSE
+  case UNABLE_TO_PARSE_ERROR_RESPONSE
+  case ID_VALIDATION_UNABLE_TO_VALIDATE
+  case ID_VALIDATION_REQUEST_FAILED
+  case SERVER_ERROR_TIMEOUT
+  case NOT_AUTHORIZED
+  case custom(errMsg: Swift.String)
+}
+extension SIDError {
+  public var message: Swift.String {
+    get
+  }
+}
+@objc @_inheritsConvenienceInitializers public class CaptureIDCardVideoPreview : MyFramework.VideoPreviewView {
+  @objc override dynamic public func draw(_ rect: CoreGraphics.CGRect)
+  @objc deinit
+  @objc override dynamic public init(frame: CoreGraphics.CGRect)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+}
+open class SIDResponse {
+  public init(partnerParams: MyFramework.PartnerParams?, success: Swift.Bool, resultText: Swift.String, confidenceValue: Swift.Float, statusResponse: MyFramework.StatusResponse?)
+  open func getPartnerParams() -> MyFramework.PartnerParams?
+  open func isSuccess() -> Swift.Bool
+  open func getResultText() -> Swift.String
+  open func getConfidenceValue() -> Swift.Int
+  open func getStatusResponse() -> MyFramework.StatusResponse?
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @IBDesignable public class IDCardOverlay {
+  @objc deinit
+}
+public struct Entry : Swift.Equatable {
+  public enum EntryType : Swift.Int {
+    case file
+    case directory
+    case symlink
+    public typealias RawValue = Swift.Int
+    public init?(rawValue: Swift.Int)
+    public var rawValue: Swift.Int {
+      get
+    }
+  }
+  public var path: Swift.String {
+    get
+  }
+  public var fileAttributes: [Foundation.FileAttributeKey : Any] {
+    get
+  }
+  public var checksum: MyFramework.CRC32 {
+    get
+  }
+  public var type: MyFramework.Entry.EntryType {
+    get
+  }
+  public var compressedSize: Swift.Int {
+    get
+  }
+  public var uncompressedSize: Swift.Int {
+    get
+  }
+  public static func == (lhs: MyFramework.Entry, rhs: MyFramework.Entry) -> Swift.Bool
+}
+extension Archive {
+  final public func extract(_ entry: MyFramework.Entry, to url: Foundation.URL, bufferSize: Swift.UInt32 = defaultReadChunkSize, progress: Foundation.Progress? = nil) throws -> MyFramework.CRC32
+  final public func extract(_ entry: MyFramework.Entry, bufferSize: Swift.UInt32 = defaultReadChunkSize, progress: Foundation.Progress? = nil, consumer: (Foundation.Data) throws -> Swift.Void) throws -> MyFramework.CRC32
+}
+open class SIDConfig {
+  public init()
+  open func setRetryOnFailurePolicy(retryOnFailurePolicy: MyFramework.RetryOnFailurePolicy)
+  open func getRetryOnFailurePolicy() -> MyFramework.RetryOnFailurePolicy?
+  open func setSidNetData(sidNetData: MyFramework.SIDNetData)
+  open func getSidNetData() -> MyFramework.SIDNetData?
+  open func setIsEnrollMode(isEnrollMode: Swift.Bool)
+  open func getIsEnrollMode() -> Swift.Bool
+  open func setTag(tag: Swift.String)
+  open func getTag() -> Swift.String
+  open func setSidNetworkRequest(sidNetworkRequest: MyFramework.SIDNetworkRequest)
+  open func getSidNetworkRequest() -> MyFramework.SIDNetworkRequest
+  open func setUseIdCard(useIdCard: Swift.Bool)
+  open func getUseIdCard() -> Swift.Bool
+  open func setPartnerParams(partnerParams: MyFramework.PartnerParams)
+  open func getPartnerParams() -> MyFramework.PartnerParams
+  open func setUserIdInfo(userIdInfo: MyFramework.SIDUserIdInfo)
+  open func getuserIdInfo() -> MyFramework.SIDUserIdInfo
+  open func save()
+  open func build(userTag: Swift.String)
+  @objc deinit
+}
+open class SIDUserIdInfo : Swift.Codable {
+  public init()
+  public func setFirstName(firstName: Swift.String)
+  public func setLastName(lastName: Swift.String)
+  public func setMiddleName(middleName: Swift.String)
+  public func setCountry(country: Swift.String)
+  public func setIdType(idType: Swift.String)
+  public func setIdNumber(idNumber: Swift.String)
+  public func setEmail(email: Swift.String)
+  public func additionalValue(name: Swift.String, value: Swift.String) -> MyFramework.SIDUserIdInfo
+  required public init(from decoder: Swift.Decoder) throws
+  @objc deinit
+  open func encode(to encoder: Swift.Encoder) throws
+}
+open class RetryOnFailurePolicy {
+  final public let MAX_RETRIES: Swift.Int
+  public init()
+  open func setMaxRetryCount(maxRetryCount: Swift.Int)
+  open func getMaxRetryCount() -> Swift.Int
+  open func setMaxRetryTimeoutSec(maxRetryTimeoutSec: Swift.Int)
+  open func getMaxRetryTimeoutSec() -> Swift.Int
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @IBDesignable open class VideoPreviewView : UIKit.UIView {
+  open var session: AVFoundation.AVCaptureSession? {
+    get
+    set
+  }
+  @objc override dynamic open class var layerClass: Swift.AnyClass {
+    @objc get
+  }
+  @objc override dynamic public init(frame: CoreGraphics.CGRect)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+public protocol CaptureIDCardDelegate {
+  func onComplete(previewUIImage: UIKit.UIImage, faceFound: Swift.Bool)
+  func onError(sidError: MyFramework.SIDError)
+}
+open class DateTimeUtils {
+  public init()
+  open func getCurrentDateTime() -> Swift.String
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers open class CaptureIDCard : ObjectiveC.NSObject {
+  public var captureIDCardDelegate: MyFramework.CaptureIDCardDelegate?
+  open func setup(captureIDCardDelegate: MyFramework.CaptureIDCardDelegate, previewView: MyFramework.CaptureIDCardVideoPreview, userTag: Swift.String)
+  open func start()
+  open func stop()
+  @objc deinit
+  @objc override dynamic public init()
+}
+@objc @_inheritsConvenienceInitializers open class CaptureSelfie : ObjectiveC.NSObject, AVFoundation.AVCaptureVideoDataOutputSampleBufferDelegate {
+  public var captureSelfieDelegate: MyFramework.CaptureSelfieDelegate?
+  open func setup(captureSelfieDelegate: MyFramework.CaptureSelfieDelegate, previewView: MyFramework.VideoPreviewView, useFrontCamera: Swift.Bool, doFlashScreenOnShutter: Swift.Bool)
+  open func manualCapture(isManualCapture: Swift.Bool)
+  open func start(screenRect: CoreGraphics.CGRect, userTag: Swift.String)
+  open func stop()
+  @objc public func captureOutput(_ output: AVFoundation.AVCaptureOutput, didDrop sampleBuffer: CoreMedia.CMSampleBuffer, from connection: AVFoundation.AVCaptureConnection)
+  @objc public func captureOutput(_ output: AVFoundation.AVCaptureOutput, didOutput sampleBuffer: CoreMedia.CMSampleBuffer, from connection: AVFoundation.AVCaptureConnection)
+  @objc deinit
+  @objc override dynamic public init()
+}
+open class SIDNetworkRequest {
+  public var delegate: MyFramework.SIDNetworkRequestDelegate?
+  public init()
+  open func setDelegate(delegate: MyFramework.SIDNetworkRequestDelegate)
+  open func initialize()
+  open func submitAll(sidConfig: MyFramework.SIDConfig) throws
+  open func cancelAll()
+  open func submit(sidConfig: MyFramework.SIDConfig) throws
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @IBDesignable public class OvalOverlay {
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers open class SIDErrorResponse {
+  open func getFailedTag() -> Swift.String?
+  open func getSIDError() -> MyFramework.SIDError?
+  @objc deinit
+}
+open class PartnerParams : Swift.Codable {
+  public init()
+  public init(userId: Swift.String, jobId: Swift.String, jobType: Swift.Int)
+  required public init(from decoder: Swift.Decoder) throws
+  public init(partnerParams: MyFramework.PartnerParams)
+  public func setUserId(userId: Swift.String)
+  public func getUserId() -> Swift.String!
+  public func setJobId(jobId: Swift.String)
+  public func getJobId() -> Swift.String!
+  public func setJobType(jobType: Swift.Int)
+  public func getJobType() -> Swift.Int!
+  public func setAdditionalValue(key: Swift.String, val: Any)
+  public func getAdditionalValue(key: Swift.String) -> Any?
+  public func encode(to encoder: Swift.Encoder) throws
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers open class StatusResponse {
+  open func getRawJsonString() -> Swift.String
+  @objc deinit
+}
+public struct IdType {
+  public static let OTHER_ID_TYPE: Swift.String
+  public static let PASSPORT: Swift.String
+  public static let NATIONAL_ID: Swift.String
+  public static let DRIVERS_LICENSE: Swift.String
+  public static let STUDENT_ID: Swift.String
+  public static let VOTER_ID: Swift.String
+  public static let CITIZEN_ID: Swift.String
+  public static let SSNIT: Swift.String
+  public static let BVN: Swift.String
+  public static let NIN: Swift.String
+  public static let ID_CARD: Swift.String
+  public static let ALIEN_CARD: Swift.String
+  public static let REFUGEE_CARD: Swift.String
+  public static let NO_ID: Swift.String
+  public static let EMPTY: Swift.String
+}
+@_hasMissingDesignatedInitializers open class SIDInfosManager {
+  public static func clearData(userTag: Swift.String)
+  public static func hasIdCard(userTag: Swift.String) -> Swift.Bool
+  public static func hasSelfies(userTag: Swift.String) -> Swift.Bool
+  public static func getIdleTags() -> Swift.Array<Swift.String>
+  public static func getLastEnrolledJobId() -> Swift.String?
+  public static func getUserId() -> Swift.String?
+  @objc deinit
+}
+public class Version {
+  public init()
+  public static func getVersion() -> Swift.String
+  public static func getBuild() -> Swift.String
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers open class SmileIDSingleton {
+  public static let sharedInstance: MyFramework.SmileIDSingleton
+  public static let DEFAULT_USER_TAG: Swift.String
+  open var geoInfos: MyFramework.GeoInfos
+  @objc deinit
+}
+public protocol CaptureSelfieDelegate {
+  func onComplete(previewUIImage: UIKit.UIImage?)
+  func onError(sidError: MyFramework.SIDError)
+  func onFaceStateChanged(faceState: Swift.Int)
+}
+public struct SIDReferenceId {
+}
+open class AudioUtils {
+  public init()
+  open func playSound()
+  @objc deinit
+}
+open class SIDNetworkUtils {
+  public init()
+  open func isConnected() -> Swift.Bool
+  @objc deinit
+}
+open class ToastUtils {
+  public init()
+  open func showToast(view: UIKit.UIView, message: Swift.String)
+  @objc deinit
+}
+open class SelfieCaptureConfig {
+  public init()
+  public static func setMaxFrameTimeout(maxFrameTimeout: Swift.Int)
+  @objc deinit
+}
+extension FileManager {
+  public func zipItem(at sourceURL: Foundation.URL, to destinationURL: Foundation.URL, shouldKeepParent: Swift.Bool = true, progress: Foundation.Progress? = nil) throws
+  public func unzipItem(at sourceURL: Foundation.URL, to destinationURL: Foundation.URL, progress: Foundation.Progress? = nil) throws
+}
+@objc @_hasMissingDesignatedInitializers public class LoginViewController : UIKit.UIViewController {
+  @objc dynamic public init()
+  @objc override dynamic public func viewDidLoad()
+  @objc deinit
+  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+}
+extension Archive {
+  final public func addEntry(with path: Swift.String, relativeTo baseURL: Foundation.URL, compressionMethod: MyFramework.CompressionMethod = .none, bufferSize: Swift.UInt32 = defaultWriteChunkSize, progress: Foundation.Progress? = nil) throws
+  final public func addEntry(with path: Swift.String, type: MyFramework.Entry.EntryType, uncompressedSize: Swift.UInt32, modificationDate: Foundation.Date = Date(), permissions: Swift.UInt16? = nil, compressionMethod: MyFramework.CompressionMethod = .none, bufferSize: Swift.UInt32 = defaultWriteChunkSize, progress: Foundation.Progress? = nil, provider: (Swift.Int, Swift.Int) throws -> Foundation.Data) throws
+  final public func remove(_ entry: MyFramework.Entry, bufferSize: Swift.UInt32 = defaultReadChunkSize, progress: Foundation.Progress? = nil) throws
+}
+@_hasMissingDesignatedInitializers public class FaceDetectorIDCard {
+  @objc deinit
+}
+open class GeoInfos {
+  public init()
+  public init(latitude: Swift.Double, longitude: Swift.Double, altitude: Swift.Double, accuracy: Swift.Double, lastUpdate: Swift.String)
+  @objc deinit
+}
+public typealias CRC32 = Swift.UInt32
+public typealias Consumer = (Foundation.Data) throws -> Swift.Void
+public typealias Provider = (Swift.Int, Swift.Int) throws -> Foundation.Data
+public let crcTable: [Swift.UInt32]
+extension Data {
+  @inline(__always) public func crc32(checksum: MyFramework.CRC32) -> MyFramework.CRC32
+}
+open class SIDNetData {
+  public enum Environment {
+    case TEST
+    case PROD
+    public static func == (a: MyFramework.SIDNetData.Environment, b: MyFramework.SIDNetData.Environment) -> Swift.Bool
+    public var hashValue: Swift.Int {
+      get
+    }
+    public func hash(into hasher: inout Swift.Hasher)
+  }
+  public init(environment: MyFramework.SIDNetData.Environment)
+  open func getAuthUrl() -> Swift.String
+  open func getCallBackUrl() -> Swift.String
+  open func getPartnerUrl() -> Swift.String
+  open func getPartnerPort() -> Swift.String
+  open func getLambdaUrl() -> Swift.String
+  open func getIDValidationUrl() -> Swift.String
+  open func addAuthHeader(key: Swift.String, value: Swift.String)
+  open func removeAuthHeader(key: Swift.String)
+  open func getAuthHeaders() -> [Swift.String : Swift.String]
+  open func getAuthToken() -> Swift.String
+  @objc deinit
+}
+public let defaultReadChunkSize: Swift.UInt32
+public let defaultWriteChunkSize: Swift.UInt32
+public let defaultFilePermissions: Swift.UInt16
+public let defaultDirectoryPermissions: Swift.UInt16
+public enum CompressionMethod : Swift.UInt16 {
+  case none
+  case deflate
+  public typealias RawValue = Swift.UInt16
+  public var rawValue: Swift.UInt16 {
+    get
+  }
+  public init?(rawValue: Swift.UInt16)
+}
+final public class Archive : Swift.Sequence {
+  public enum ArchiveError : Swift.Error {
+    case unreadableArchive
+    case unwritableArchive
+    case invalidEntryPath
+    case invalidCompressionMethod
+    case invalidStartOfCentralDirectoryOffset
+    case missingEndOfCentralDirectoryRecord
+    case cancelledOperation
+    public static func == (a: MyFramework.Archive.ArchiveError, b: MyFramework.Archive.ArchiveError) -> Swift.Bool
+    public var hashValue: Swift.Int {
+      get
+    }
+    public func hash(into hasher: inout Swift.Hasher)
+  }
+  public enum AccessMode : Swift.UInt {
+    case create
+    case read
+    case update
+    public typealias RawValue = Swift.UInt
+    public init?(rawValue: Swift.UInt)
+    public var rawValue: Swift.UInt {
+      get
+    }
+  }
+  final public let url: Foundation.URL
+  final public let accessMode: MyFramework.Archive.AccessMode
+  public init?(url: Foundation.URL, accessMode mode: MyFramework.Archive.AccessMode)
+  @objc deinit
+  final public func makeIterator() -> Swift.AnyIterator<MyFramework.Entry>
+  final public subscript(path: Swift.String) -> MyFramework.Entry? {
+    get
+  }
+  public typealias Element = MyFramework.Entry
+  public typealias Iterator = Swift.AnyIterator<MyFramework.Entry>
+}
+extension Archive {
+  final public func totalUnitCountForRemoving(_ entry: MyFramework.Entry) -> Swift.Int64
+  final public func totalUnitCountForReading(_ entry: MyFramework.Entry) -> Swift.Int64
+  final public func totalUnitCountForAddingItem(at url: Foundation.URL) -> Swift.Int64
+}
+extension MyFramework.Entry.EntryType : Swift.Equatable {}
+extension MyFramework.Entry.EntryType : Swift.Hashable {}
+extension MyFramework.Entry.EntryType : Swift.RawRepresentable {}
+extension MyFramework.SIDNetData.Environment : Swift.Equatable {}
+extension MyFramework.SIDNetData.Environment : Swift.Hashable {}
+extension MyFramework.CompressionMethod : Swift.Equatable {}
+extension MyFramework.CompressionMethod : Swift.Hashable {}
+extension MyFramework.CompressionMethod : Swift.RawRepresentable {}
+extension MyFramework.Archive.ArchiveError : Swift.Equatable {}
+extension MyFramework.Archive.ArchiveError : Swift.Hashable {}
+extension MyFramework.Archive.AccessMode : Swift.Equatable {}
+extension MyFramework.Archive.AccessMode : Swift.Hashable {}
+extension MyFramework.Archive.AccessMode : Swift.RawRepresentable {}
