@@ -1,0 +1,664 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.4 (swiftlang-1205.0.26.9 clang-1205.0.19.55)
+// swift-module-flags: -target arm64-apple-ios10.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name Smile_Identity_SDK
+import AVFoundation
+import AudioToolbox
+import Compression
+import CoreFoundation
+import CoreMedia
+import Foundation
+import MLKitFaceDetection
+import MLKitVision
+import MobileCoreServices
+@_exported import Smile_Identity_SDK
+import Swift
+import SwiftUI
+import SystemConfiguration
+import UIKit
+extension Archive {
+  final public func extract(_ entry: Smile_Identity_SDK.Entry, to url: Foundation.URL, bufferSize: Swift.UInt32 = defaultReadChunkSize, progress: Foundation.Progress? = nil) throws -> Smile_Identity_SDK.CRC32
+  final public func extract(_ entry: Smile_Identity_SDK.Entry, bufferSize: Swift.UInt32 = defaultReadChunkSize, progress: Foundation.Progress? = nil, consumer: (Foundation.Data) throws -> Swift.Void) throws -> Smile_Identity_SDK.CRC32
+}
+extension Archive {
+  final public func addEntry(with path: Swift.String, relativeTo baseURL: Foundation.URL, compressionMethod: Smile_Identity_SDK.CompressionMethod = .none, bufferSize: Swift.UInt32 = defaultWriteChunkSize, progress: Foundation.Progress? = nil) throws
+  final public func addEntry(with path: Swift.String, type: Smile_Identity_SDK.Entry.EntryType, uncompressedSize: Swift.UInt32, modificationDate: Foundation.Date = Date(), permissions: Swift.UInt16? = nil, compressionMethod: Smile_Identity_SDK.CompressionMethod = .none, bufferSize: Swift.UInt32 = defaultWriteChunkSize, progress: Foundation.Progress? = nil, provider: (Swift.Int, Swift.Int) throws -> Foundation.Data) throws
+  final public func remove(_ entry: Smile_Identity_SDK.Entry, bufferSize: Swift.UInt32 = defaultReadChunkSize, progress: Foundation.Progress? = nil) throws
+}
+public let defaultReadChunkSize: Swift.UInt32
+public let defaultWriteChunkSize: Swift.UInt32
+public let defaultFilePermissions: Swift.UInt16
+public let defaultDirectoryPermissions: Swift.UInt16
+public enum CompressionMethod : Swift.UInt16 {
+  case none
+  case deflate
+  public init?(rawValue: Swift.UInt16)
+  public typealias RawValue = Swift.UInt16
+  public var rawValue: Swift.UInt16 {
+    get
+  }
+}
+final public class Archive : Swift.Sequence {
+  public enum ArchiveError : Swift.Error {
+    case unreadableArchive
+    case unwritableArchive
+    case invalidEntryPath
+    case invalidCompressionMethod
+    case invalidStartOfCentralDirectoryOffset
+    case missingEndOfCentralDirectoryRecord
+    case cancelledOperation
+    public static func == (a: Smile_Identity_SDK.Archive.ArchiveError, b: Smile_Identity_SDK.Archive.ArchiveError) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public enum AccessMode : Swift.UInt {
+    case create
+    case read
+    case update
+    public init?(rawValue: Swift.UInt)
+    public typealias RawValue = Swift.UInt
+    public var rawValue: Swift.UInt {
+      get
+    }
+  }
+  final public let url: Foundation.URL
+  final public let accessMode: Smile_Identity_SDK.Archive.AccessMode
+  public init?(url: Foundation.URL, accessMode mode: Smile_Identity_SDK.Archive.AccessMode)
+  @objc deinit
+  final public func makeIterator() -> Swift.AnyIterator<Smile_Identity_SDK.Entry>
+  final public subscript(path: Swift.String) -> Smile_Identity_SDK.Entry? {
+    get
+  }
+  public typealias Element = Smile_Identity_SDK.Entry
+  public typealias Iterator = Swift.AnyIterator<Smile_Identity_SDK.Entry>
+}
+extension Archive {
+  final public func totalUnitCountForRemoving(_ entry: Smile_Identity_SDK.Entry) -> Swift.Int64
+  final public func totalUnitCountForReading(_ entry: Smile_Identity_SDK.Entry) -> Swift.Int64
+  final public func totalUnitCountForAddingItem(at url: Foundation.URL) -> Swift.Int64
+}
+open class AudioUtils {
+  public init()
+  open func playSound()
+  @objc deinit
+}
+public enum CameraFace {
+  case FRONT
+  case BACK
+  public static func == (a: Smile_Identity_SDK.CameraFace, b: Smile_Identity_SDK.CameraFace) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+@objc @_inheritsConvenienceInitializers open class CaptureIDCard : ObjectiveC.NSObject {
+  public var captureIDCardDelegate: Smile_Identity_SDK.CaptureIDCardDelegate?
+  open func setup(captureIDCardDelegate: Smile_Identity_SDK.CaptureIDCardDelegate, previewView: Smile_Identity_SDK.CaptureIDCardVideoPreview, userTag: Swift.String)
+  open func start()
+  open func stop()
+  @objc override dynamic public init()
+  @objc deinit
+}
+public protocol CaptureIDCardDelegate {
+  func onSmartCardViewFrontComplete(previewUIImage: UIKit.UIImage, faceFound: Swift.Bool)
+  func onSmartCardViewBackComplete(previewUIImage: UIKit.UIImage)
+  func onSmartCardViewError(sidError: Smile_Identity_SDK.SIDError)
+  func onSmartCardViewClosed()
+}
+@objc @_inheritsConvenienceInitializers public class CaptureIDCardVideoPreview : Smile_Identity_SDK.VideoPreviewView {
+  @objc override dynamic public func draw(_ rect: CoreGraphics.CGRect)
+  @objc override dynamic public init(frame: CoreGraphics.CGRect)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers open class CaptureSelfie : ObjectiveC.NSObject, AVFoundation.AVCaptureVideoDataOutputSampleBufferDelegate {
+  public var captureSelfieDelegate: Smile_Identity_SDK.CaptureSelfieDelegate?
+  open func setup(captureSelfieDelegate: Smile_Identity_SDK.CaptureSelfieDelegate, previewView: Smile_Identity_SDK.VideoPreviewView, useFrontCamera: Swift.Bool, doFlashScreenOnShutter: Swift.Bool)
+  open func manualCapture(isManualCapture: Swift.Bool)
+  open func start(screenRect: CoreGraphics.CGRect, userTag: Swift.String)
+  open func stop()
+  @objc public func captureOutput(_ output: AVFoundation.AVCaptureOutput, didDrop sampleBuffer: CoreMedia.CMSampleBuffer, from connection: AVFoundation.AVCaptureConnection)
+  @objc public func captureOutput(_ output: AVFoundation.AVCaptureOutput, didOutput sampleBuffer: CoreMedia.CMSampleBuffer, from connection: AVFoundation.AVCaptureConnection)
+  @objc override dynamic public init()
+  @objc deinit
+}
+public protocol CaptureSelfieDelegate {
+  func onComplete(previewUIImage: UIKit.UIImage?)
+  func onError(sidError: Smile_Identity_SDK.SIDError)
+  func onFaceStateChanged(faceState: Swift.Int)
+}
+public enum CaptureType {
+  case SELFIE
+  case ID_CAPTURE
+  case SELFIE_AND_ID_CAPTURE
+  case ID_CAPTURE_AND_SELFIE
+  public static func == (a: Smile_Identity_SDK.CaptureType, b: Smile_Identity_SDK.CaptureType) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public typealias CRC32 = Swift.UInt32
+public typealias Consumer = (Foundation.Data) throws -> Swift.Void
+public typealias Provider = (Swift.Int, Swift.Int) throws -> Foundation.Data
+public let crcTable: [Swift.UInt32]
+extension Data {
+  @inline(__always) public func crc32(checksum: Smile_Identity_SDK.CRC32) -> Smile_Identity_SDK.CRC32
+}
+open class DateTimeUtils {
+  public init()
+  open func getCurrentDateTime() -> Swift.String
+  @objc deinit
+}
+public struct Entry : Swift.Equatable {
+  public enum EntryType : Swift.Int {
+    case file
+    case directory
+    case symlink
+    public init?(rawValue: Swift.Int)
+    public typealias RawValue = Swift.Int
+    public var rawValue: Swift.Int {
+      get
+    }
+  }
+  public var path: Swift.String {
+    get
+  }
+  public var fileAttributes: [Foundation.FileAttributeKey : Any] {
+    get
+  }
+  public var checksum: Smile_Identity_SDK.CRC32 {
+    get
+  }
+  public var type: Smile_Identity_SDK.Entry.EntryType {
+    get
+  }
+  public var compressedSize: Swift.Int {
+    get
+  }
+  public var uncompressedSize: Swift.Int {
+    get
+  }
+  public static func == (lhs: Smile_Identity_SDK.Entry, rhs: Smile_Identity_SDK.Entry) -> Swift.Bool
+}
+@_hasMissingDesignatedInitializers public class FaceDetectorIDCard {
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class FaceState {
+  public static let NO_FACE_FOUND: Swift.Int
+  public static let DO_MOVE_CLOSER: Swift.Int
+  public static let DO_SMILE: Swift.Int
+  public static let CAPTURING: Swift.Int
+  @objc deinit
+}
+extension FileManager {
+  public func zipItem(at sourceURL: Foundation.URL, to destinationURL: Foundation.URL, shouldKeepParent: Swift.Bool = true, progress: Foundation.Progress? = nil) throws
+  public func unzipItem(at sourceURL: Foundation.URL, to destinationURL: Foundation.URL, progress: Foundation.Progress? = nil) throws
+}
+open class GeoInfos {
+  public init()
+  public init(latitude: Swift.Double, longitude: Swift.Double, altitude: Swift.Double, accuracy: Swift.Double, lastUpdate: Swift.String)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @IBDesignable public class IDCardOverlay {
+  @objc deinit
+}
+public struct IdType {
+  public static let OTHER_ID_TYPE: Swift.String
+  public static let PASSPORT: Swift.String
+  public static let NATIONAL_ID: Swift.String
+  public static let DRIVERS_LICENSE: Swift.String
+  public static let STUDENT_ID: Swift.String
+  public static let VOTER_ID: Swift.String
+  public static let CITIZEN_ID: Swift.String
+  public static let SSNIT: Swift.String
+  public static let BVN: Swift.String
+  public static let NIN: Swift.String
+  public static let ID_CARD: Swift.String
+  public static let ALIEN_CARD: Swift.String
+  public static let REFUGEE_CARD: Swift.String
+  public static let NO_ID: Swift.String
+  public static let EMPTY: Swift.String
+}
+@_hasMissingDesignatedInitializers open class IDValidationResponse {
+  open func getRawJsonString() -> Swift.String
+  open func getFullDataRawJsonString() -> Swift.String
+  open func getRequestSucceeded() -> Swift.Bool
+  open func getSmileJobID() -> Swift.String
+  open func getPartnerParams() -> Smile_Identity_SDK.PartnerParams
+  open func getResultType() -> Swift.String
+  open func getResultText() -> Swift.String
+  open func getResultCode() -> Swift.Int
+  open func getActions() -> [Swift.String : Any]
+  open func getCountry() -> Swift.String
+  open func getIDType() -> Swift.String
+  open func getIDNumber() -> Swift.String
+  open func getExpirationDate() -> Swift.String
+  open func getFullName() -> Swift.String
+  open func getDOB() -> Swift.String
+  open func getPhoto() -> Swift.String
+  open func getPhoneNumber() -> Swift.String
+  open func getGender() -> Swift.String
+  open func getAddress() -> Swift.String
+  open func getSource() -> Swift.String
+  open func getSecKey() -> Swift.String
+  open func getTimeStamp() -> Swift.Int64
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @IBDesignable public class OvalOverlay {
+  @objc deinit
+}
+open class PartnerParams : Swift.Codable {
+  public init()
+  public init(userId: Swift.String, jobId: Swift.String, jobType: Swift.Int)
+  required public init(from decoder: Swift.Decoder) throws
+  public init(partnerParams: Smile_Identity_SDK.PartnerParams)
+  public func setUserId(userId: Swift.String)
+  public func getUserId() -> Swift.String!
+  public func setJobId(jobId: Swift.String)
+  public func getJobId() -> Swift.String!
+  public func setJobType(jobType: Swift.Int)
+  public func getJobType() -> Swift.Int!
+  public func setAdditionalValue(key: Swift.String, val: Any)
+  public func getAdditionalValue(key: Swift.String) -> Any?
+  public func encode(to encoder: Swift.Encoder) throws
+  @objc deinit
+}
+open class RetryOnFailurePolicy {
+  final public let MAX_RETRIES: Swift.Int
+  public init()
+  open func setMaxRetryCount(maxRetryCount: Swift.Int)
+  open func getMaxRetryCount() -> Swift.Int
+  open func setMaxRetryTimeoutSec(maxRetryTimeoutSec: Swift.Int)
+  open func getMaxRetryTimeoutSec() -> Swift.Int
+  @objc deinit
+}
+open class SelfieCaptureConfig {
+  public init()
+  public static func setMaxFrameTimeout(maxFrameTimeout: Swift.Int)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class SIDCaptureManager {
+  public func getSidSelfieConfig() -> Smile_Identity_SDK.SIDSelfieCaptureConfig?
+  public func getSidIdCaptureConfig() -> Smile_Identity_SDK.SIDIDCaptureConfig?
+  public func getCurrentTag() -> Swift.String?
+  public func getDelegate() -> Smile_Identity_SDK.SIDCaptureManagerDelegate?
+  public func getCaptureType() -> Smile_Identity_SDK.CaptureType?
+  public func start()
+  final public class Builder {
+    public init(delegate: Smile_Identity_SDK.SIDCaptureManagerDelegate, captureType: Smile_Identity_SDK.CaptureType)
+    final public func setTag(tag: Swift.String) -> Smile_Identity_SDK.SIDCaptureManager.Builder
+    final public func setSidSelfieConfig(sidSelfieConfig: Smile_Identity_SDK.SIDSelfieCaptureConfig) -> Smile_Identity_SDK.SIDCaptureManager.Builder
+    final public func setSidIdCaptureConfig(sidIdCaptureConfig: Smile_Identity_SDK.SIDIDCaptureConfig) -> Smile_Identity_SDK.SIDCaptureManager.Builder
+    final public func build() -> Smile_Identity_SDK.SIDCaptureManager
+    @objc deinit
+  }
+  @objc deinit
+}
+public protocol SIDCaptureManagerDelegate {
+  func onSuccess(tag: Swift.String, selfiePreview: UIKit.UIImage?, idFrontPreview: UIKit.UIImage?, idBackPreview: UIKit.UIImage?)
+  func onError(tag: Swift.String, sidError: Smile_Identity_SDK.SIDError)
+}
+open class SIDConfig {
+  public init()
+  open func setRetryOnFailurePolicy(retryOnFailurePolicy: Smile_Identity_SDK.RetryOnFailurePolicy)
+  open func getRetryOnFailurePolicy() -> Smile_Identity_SDK.RetryOnFailurePolicy?
+  open func setSidNetData(sidNetData: Smile_Identity_SDK.SIDNetData)
+  open func getSidNetData() -> Smile_Identity_SDK.SIDNetData?
+  open func setIsEnrollMode(isEnrollMode: Swift.Bool)
+  open func getIsEnrollMode() -> Swift.Bool
+  open func setTag(tag: Swift.String)
+  open func getTag() -> Swift.String
+  open func setSidNetworkRequest(sidNetworkRequest: Smile_Identity_SDK.SIDNetworkRequest)
+  open func getSidNetworkRequest() -> Smile_Identity_SDK.SIDNetworkRequest
+  open func setUseIdCard(useIdCard: Swift.Bool)
+  open func getUseIdCard() -> Swift.Bool
+  open func setPartnerParams(partnerParams: Smile_Identity_SDK.PartnerParams)
+  open func getPartnerParams() -> Smile_Identity_SDK.PartnerParams
+  open func setUserIdInfo(userIdInfo: Smile_Identity_SDK.SIDUserIdInfo)
+  open func getuserIdInfo() -> Smile_Identity_SDK.SIDUserIdInfo
+  open func save()
+  open func build(userTag: Swift.String)
+  @objc deinit
+}
+public enum SIDError : Swift.Error {
+  case COULD_NOT_INITIALIZE_CAMERA
+  case NO_FRONT_FACING_CAMERA_AVAILABLE
+  case NO_BACK_FACING_CAMERA_AVAILABLE
+  case ID_CARD_CAPTURE_FAILED
+  case ID_CARD_PICTURE_CALLBACK_FAILED
+  case ID_CARD_AUTOFOCUS_FAILED
+  case ID_CARD_TOUCHFOCUS_FAILED
+  case ID_CARD_DRAWVIEW_FAILED
+  case ID_CARD_CAMERA_INITIALIZATION_FAILED
+  case UNABLE_TO_SUBMIT
+  case UNABLE_TO_SUBMIT_PACKAGING_ERROR
+  case UNABLE_TO_SUBMIT_COULD_NOT_UPLOAD_ZIP
+  case UNABLE_TO_SUBMIT_COULD_NOT_CREATE_ZIP
+  case UNABLE_TO_SUBMIT_COULD_NOT_TRANSMIT_TO_LAMBDA
+  case UNABLE_TO_SUBMIT_COULD_NOT_AUTH
+  case AUTH_SMILE_REQUEST_FAILED
+  case AUTH_SMILE_REQUEST_FAILED_UNABLE_TO_PARSE_RESPONSE
+  case UNABLE_TO_VERIFY
+  case REQUEST_FAILED_TRY_AGAIN
+  case FAILED_JOB_STATUS_CANCELLED_OR_TIMEOUT_AUTH
+  case FAILED_JOB_STATUS_CANCELLED_OR_TIMEOUT
+  case PREVIOUS_ENROLL_FAILED
+  case DATA_PACKAGING_FAILED
+  case ENROLL_FAILED
+  case DATA_PACKAGING_FAILED_AUTH_BEFORE_ENROLL
+  case NO_IMAGE_FOUND
+  case ID_CARD_REQUIRED
+  case ENROLL_NOT_FOUND
+  case ERROR_UNKNOWN
+  case UNABLE_TO_SUBMIT_TRY_AGAIN
+  case TAG_NOT_FOUND
+  case NETWORK_DATA_NOT_VALID
+  case NO_NETWORK_CONNECTION
+  case NO_USER_ID_FOUND_PLEASE_ENROLL_FIRST
+  case UNABLE_TO_ENROLL_OR_AUTH
+  case UNABLE_TO_CAPTURE_SELFIE_FRAME_IMAGE
+  case UNABLE_TO_CAPTURE_SELFIE_PREVIEW_IMAGE
+  case UNABLE_TO_CREATE_SELFIE_PREVIEW_UI_IMAGE
+  case UNABLE_TO_CAPTURE_FRONT_OF_ID
+  case UNABLE_TO_CAPTURE_BACK_OF_ID
+  case ID_CAPTURE_CLOSED
+  case UNABLE_TO_CAPTURE_ID_CARD_IMAGE
+  case UNABLE_TO_CAPTURE_ID_CARD_FACE_IMAGE
+  case UNABLE_TO_BATCH_NEEDS_TO_BE_ENROLL_MODE
+  case UNABLE_TO_SUBMIT_UPLOAD_LINK_NOT_RECEIVED
+  case UNABLE_TO_SUBMIT_PREUPLOAD_UNABLE_TO_PARSE_RESPONSE
+  case UNABLE_TO_PARSE_ERROR_RESPONSE
+  case ID_VALIDATION_UNABLE_TO_VALIDATE
+  case ID_VALIDATION_REQUEST_FAILED
+  case SERVER_ERROR_TIMEOUT
+  case NOT_AUTHORIZED
+  case custom(errMsg: Swift.String)
+}
+extension SIDError {
+  public var message: Swift.String {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers open class SIDErrorResponse {
+  open func getFailedTag() -> Swift.String?
+  open func getSIDError() -> Smile_Identity_SDK.SIDError?
+  @objc deinit
+}
+public enum IDCaptureType {
+  case Front
+  case Back
+  case Front_And_Back
+  public static func == (a: Smile_Identity_SDK.IDCaptureType, b: Smile_Identity_SDK.IDCaptureType) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers public class SIDIDCaptureConfig {
+  public func getPromptBlurry() -> Swift.String
+  public func getPromptDetectingFace() -> Swift.String
+  public func getPromptFaceDetected() -> Swift.String
+  public func getPromptFitID() -> Swift.String
+  public func getPromptFlashMissing() -> Swift.String
+  public func getPromptInsufficientLight() -> Swift.String
+  public func getPromptLoading() -> Swift.String
+  public func getPromptNoFaceDetected() -> Swift.String
+  public func getIdCaptureType() -> Smile_Identity_SDK.IDCaptureType
+  public func getIdCaptureDelegate() -> Smile_Identity_SDK.IDCardControllerDelegate?
+  final public class Builder {
+    public init()
+    final public func setPromptBlurry(promptBlurry: Swift.String) -> Smile_Identity_SDK.SIDIDCaptureConfig.Builder
+    final public func setPromptDetectingFace(promptDetectingFace: Swift.String) -> Smile_Identity_SDK.SIDIDCaptureConfig.Builder
+    final public func setPromptFaceDetected(promptFaceDetected: Swift.String) -> Smile_Identity_SDK.SIDIDCaptureConfig.Builder
+    final public func setPromptFitID(promptFitID: Swift.String) -> Smile_Identity_SDK.SIDIDCaptureConfig.Builder
+    final public func setPromptFlashMissing(promptFlashMissing: Swift.String) -> Smile_Identity_SDK.SIDIDCaptureConfig.Builder
+    final public func setPromptInsufficientLight(promptInsufficientLight: Swift.String) -> Smile_Identity_SDK.SIDIDCaptureConfig.Builder
+    final public func setPromptLoading(promptLoading: Swift.String) -> Smile_Identity_SDK.SIDIDCaptureConfig.Builder
+    final public func setPromptNoFaceDetected(promptNoFaceDetected: Swift.String) -> Smile_Identity_SDK.SIDIDCaptureConfig.Builder
+    final public func setIdCaptureType(idCaptureType: Smile_Identity_SDK.IDCaptureType) -> Smile_Identity_SDK.SIDIDCaptureConfig.Builder
+    final public func setIdCaptureDelegate(idCaptureDelegate: Smile_Identity_SDK.IDCardControllerDelegate) -> Smile_Identity_SDK.SIDIDCaptureConfig.Builder
+    final public func build() -> Smile_Identity_SDK.SIDIDCaptureConfig?
+    @objc deinit
+  }
+  @objc deinit
+}
+public protocol IDCardControllerDelegate {
+  func onFrontCaptureSuccess(tag: Swift.String, idCardPreview: UIKit.UIImage?)
+  func onBackCaptureSuccess(tag: Swift.String, idCardPreview: UIKit.UIImage?)
+  func onCaptureSuccess(tag: Swift.String, frontPreview: UIKit.UIImage?, backPreview: UIKit.UIImage?)
+  func onError(tag: Swift.String, sidError: Smile_Identity_SDK.SIDError)
+  func onClosed(tag: Swift.String)
+}
+@objc @_inheritsConvenienceInitializers public class SIDIDCardViewController : UIKit.UIViewController, Smile_Identity_SDK.CaptureIDCardDelegate {
+  @objc override dynamic public func viewDidLoad()
+  @objc override dynamic public func viewDidAppear(_ animated: Swift.Bool)
+  @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
+  public func onSmartCardViewFrontComplete(previewUIImage: UIKit.UIImage, faceFound: Swift.Bool)
+  public func onSmartCardViewBackComplete(previewUIImage: UIKit.UIImage)
+  public func onSmartCardViewError(sidError: Smile_Identity_SDK.SIDError)
+  public func onSmartCardViewClosed()
+  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers open class SIDInfosManager {
+  public static func clearData(userTag: Swift.String)
+  public static func hasIdCard(userTag: Swift.String) -> Swift.Bool
+  public static func hasSelfies(userTag: Swift.String) -> Swift.Bool
+  public static func getIdleTags() -> Swift.Array<Swift.String>
+  public static func getLastEnrolledJobId() -> Swift.String?
+  public static func getUserId() -> Swift.String?
+  @objc deinit
+}
+open class SIDNetData {
+  public enum Environment {
+    case TEST
+    case PROD
+    public static func == (a: Smile_Identity_SDK.SIDNetData.Environment, b: Smile_Identity_SDK.SIDNetData.Environment) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public init(environment: Smile_Identity_SDK.SIDNetData.Environment)
+  open func getAuthUrl() -> Swift.String
+  open func getCallBackUrl() -> Swift.String
+  open func getPartnerUrl() -> Swift.String
+  open func getPartnerPort() -> Swift.String
+  open func getLambdaUrl() -> Swift.String
+  open func getIDValidationUrl() -> Swift.String
+  open func addAuthHeader(key: Swift.String, value: Swift.String)
+  open func removeAuthHeader(key: Swift.String)
+  open func getAuthHeaders() -> [Swift.String : Swift.String]
+  open func getAuthToken() -> Swift.String
+  open func isProduction() -> Swift.Bool
+  open func setCallBackUrl(callbackUrl: Swift.String)
+  @objc deinit
+}
+open class SIDNetworkRequest {
+  public var delegate: Smile_Identity_SDK.SIDNetworkRequestDelegate?
+  public init()
+  open func setDelegate(delegate: Smile_Identity_SDK.SIDNetworkRequestDelegate)
+  open func initialize()
+  open func submitAll(sidConfig: Smile_Identity_SDK.SIDConfig) throws
+  open func cancelAll()
+  open func submit(sidConfig: Smile_Identity_SDK.SIDConfig) throws
+  @objc deinit
+}
+public protocol SIDNetworkRequestDelegate {
+  func onStartJobStatus()
+  func onEndJobStatus()
+  func onUpdateJobProgress(progress: Swift.Int)
+  func onUpdateJobStatus(msg: Swift.String)
+  func onAuthenticated(sidResponse: Smile_Identity_SDK.SIDResponse)
+  func onEnrolled(sidResponse: Smile_Identity_SDK.SIDResponse)
+  func onComplete()
+  func onError(sidError: Smile_Identity_SDK.SIDError)
+  func onIdValidated(idValidationResponse: Smile_Identity_SDK.IDValidationResponse)
+}
+open class SIDNetworkUtils {
+  public init()
+  open func isConnected() -> Swift.Bool
+  @objc deinit
+}
+public struct SIDReferenceId {
+}
+open class SIDResponse {
+  public init(partnerParams: Smile_Identity_SDK.PartnerParams?, success: Swift.Bool, resultText: Swift.String, confidenceValue: Swift.Float, statusResponse: Smile_Identity_SDK.StatusResponse?)
+  open func getPartnerParams() -> Smile_Identity_SDK.PartnerParams?
+  open func isSuccess() -> Swift.Bool
+  open func getResultText() -> Swift.String
+  open func getConfidenceValue() -> Swift.Int
+  open func getStatusResponse() -> Smile_Identity_SDK.StatusResponse?
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class SIDSelfieCaptureConfig {
+  public func getPromptFaceNotFound() -> Swift.String
+  public func getPromptMoveCloser() -> Swift.String
+  public func getPromptDoSmile() -> Swift.String
+  public func getPromptCapturing() -> Swift.String
+  public func getPromptFaceTooClose() -> Swift.String
+  public func getPromptTooDark() -> Swift.String
+  public func getPromptBlurry() -> Swift.String
+  public func getPromptIdle() -> Swift.String
+  public func getPromptCompatibilityMode() -> Swift.String
+  public func getCameraFace() -> Smile_Identity_SDK.CameraFace
+  public func isManualCapture() -> Swift.Bool
+  public func isFlashScreen() -> Swift.Bool
+  public func getCapturingProgressColor() -> UIKit.UIColor?
+  public func getCapturedProgressColor() -> UIKit.UIColor?
+  public func getCaptureTip() -> Swift.String
+  public func getPromptDefault() -> Swift.String
+  public func getCaptureTitle() -> Swift.String
+  public func getReviewTitle() -> Swift.String
+  public func getReviewMainText() -> Swift.String
+  public func getReviewTip() -> Swift.String
+  public func getReviewConfirmButton() -> Swift.String
+  public func getReviewRetakeButton() -> Swift.String
+  public func getSelfieScreenTitle() -> Swift.String
+  public func getReviewScreenTitle() -> Swift.String
+  public func getReviewMainTextColor() -> UIKit.UIColor?
+  public func getReviewConfirmButtonColor() -> UIKit.UIColor?
+  public func getReviewCancelButtonColor() -> UIKit.UIColor?
+  public func getReviewConfirmButtonTextColor() -> UIKit.UIColor
+  public func getReviewCancelButtonTextColor() -> UIKit.UIColor
+  public class Builder {
+    public init()
+    public func setCameraFace(cameraFace: Smile_Identity_SDK.CameraFace) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setManualCapture(manualCapture: Swift.Bool) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setFlashScreen(flashScreen: Swift.Bool) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setPromptFaceNotFound(promptFaceNotFound: Swift.String) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setPromptMoveCloser(promptMoveCloser: Swift.String) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setPromptDoSmile(promptDoSmile: Swift.String) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setPromptCapturing(promptCapturing: Swift.String) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setPromptFaceTooClose(promptFaceTooClose: Swift.String) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setPromptTooDark(promptTooDark: Swift.String) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setPromptBlurry(promptBlurry: Swift.String) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setPromptIdle(promptIdle: Swift.String) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setPromptCompatibilityMode(promptCompatibilityMode: Swift.String) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setCapturingProgressColor(capturingProgressColor: UIKit.UIColor) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setCapturedProgressColor(capturedProgressColor: UIKit.UIColor) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setCaptureTip(captureTip: Swift.String) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setPromptDefault(promptDefault: Swift.String) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setCaptureTitle(captureTitle: Swift.String) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setReviewTitle(reviewTitle: Swift.String) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setReviewMainText(reviewMainText: Swift.String) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setReviewTip(reviewTip: Swift.String) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setReviewConfirmButton(reviewConfirmButton: Swift.String) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setReviewRetakeButton(reviewRetakeButton: Swift.String) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setSelfieScreenTitle(selfieScreenTitle: Swift.String) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setReviewScreenTitle(reviewScreenTitle: Swift.String) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setReviewMainTextColor(reviewMainTextColor: UIKit.UIColor) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setReviewConfirmButtonColor(reviewConfirmButtonColor: UIKit.UIColor) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setReviewCancelButtonColor(reviewCancelButtonColor: UIKit.UIColor) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setReviewConfirmButtonTextColor(reviewConfirmButtonTextColor: UIKit.UIColor) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func setReviewCancelButtonTextColor(reviewCancelButtonTextColor: UIKit.UIColor) -> Smile_Identity_SDK.SIDSelfieCaptureConfig.Builder
+    public func build() -> Smile_Identity_SDK.SIDSelfieCaptureConfig
+    @objc deinit
+  }
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class SIDSmartCardView : UIKit.UIView {
+  @objc required dynamic public init?(coder aDecoder: Foundation.NSCoder)
+  @objc override dynamic public func sizeThatFits(_ size: CoreGraphics.CGSize) -> CoreGraphics.CGSize
+  @objc override dynamic public func layoutSubviews()
+  public func setup(captureIDCardDelegate: Smile_Identity_SDK.CaptureIDCardDelegate, userTag: Swift.String, frontCapture: Swift.Bool = true)
+  public func changeCapture(frontCapture: Swift.Bool)
+  @objc override dynamic public func willMove(toSuperview newSuperview: UIKit.UIView?)
+  @objc override dynamic public func didMoveToSuperview()
+  @objc override dynamic public func willMove(toWindow newWindow: UIKit.UIWindow?)
+  @objc override dynamic public func didMoveToWindow()
+  @objc deinit
+}
+open class SIDUserIdInfo : Swift.Codable {
+  public init()
+  public func setFirstName(firstName: Swift.String)
+  public func setLastName(lastName: Swift.String)
+  public func setMiddleName(middleName: Swift.String)
+  public func setCountry(country: Swift.String)
+  public func setIdType(idType: Swift.String)
+  public func setIdNumber(idNumber: Swift.String)
+  public func setEmail(email: Swift.String)
+  public func additionalValue(name: Swift.String, value: Swift.String) -> Smile_Identity_SDK.SIDUserIdInfo
+  @objc deinit
+  open func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers open class SmileIDSingleton {
+  public static let sharedInstance: Smile_Identity_SDK.SmileIDSingleton
+  public static let DEFAULT_USER_TAG: Swift.String
+  open var geoInfos: Smile_Identity_SDK.GeoInfos
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers open class StatusResponse {
+  open func getRawJsonString() -> Swift.String
+  open func getJobStatusRequest() -> [Swift.String : Any]?
+  @objc deinit
+}
+open class ToastUtils {
+  public init()
+  open func showToast(view: UIKit.UIView, message: Swift.String)
+  @objc deinit
+}
+extension UIColor {
+  convenience public init?(hex: Swift.String)
+}
+public class Version {
+  public init()
+  public static func getVersion() -> Swift.String
+  public static func getBuild() -> Swift.String
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @IBDesignable open class VideoPreviewView : UIKit.UIView {
+  open var session: AVFoundation.AVCaptureSession? {
+    get
+    set
+  }
+  @objc override dynamic open class var layerClass: Swift.AnyClass {
+    @objc get
+  }
+  @objc override dynamic public init(frame: CoreGraphics.CGRect)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+extension Smile_Identity_SDK.CompressionMethod : Swift.Equatable {}
+extension Smile_Identity_SDK.CompressionMethod : Swift.Hashable {}
+extension Smile_Identity_SDK.CompressionMethod : Swift.RawRepresentable {}
+extension Smile_Identity_SDK.Archive.ArchiveError : Swift.Equatable {}
+extension Smile_Identity_SDK.Archive.ArchiveError : Swift.Hashable {}
+extension Smile_Identity_SDK.Archive.AccessMode : Swift.Equatable {}
+extension Smile_Identity_SDK.Archive.AccessMode : Swift.Hashable {}
+extension Smile_Identity_SDK.Archive.AccessMode : Swift.RawRepresentable {}
+extension Smile_Identity_SDK.CameraFace : Swift.Equatable {}
+extension Smile_Identity_SDK.CameraFace : Swift.Hashable {}
+extension Smile_Identity_SDK.CaptureType : Swift.Equatable {}
+extension Smile_Identity_SDK.CaptureType : Swift.Hashable {}
+extension Smile_Identity_SDK.Entry.EntryType : Swift.Equatable {}
+extension Smile_Identity_SDK.Entry.EntryType : Swift.Hashable {}
+extension Smile_Identity_SDK.Entry.EntryType : Swift.RawRepresentable {}
+extension Smile_Identity_SDK.IDCaptureType : Swift.Equatable {}
+extension Smile_Identity_SDK.IDCaptureType : Swift.Hashable {}
+extension Smile_Identity_SDK.SIDNetData.Environment : Swift.Equatable {}
+extension Smile_Identity_SDK.SIDNetData.Environment : Swift.Hashable {}

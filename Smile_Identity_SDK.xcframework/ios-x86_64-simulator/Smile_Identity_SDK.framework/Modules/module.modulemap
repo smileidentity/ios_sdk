@@ -1,0 +1,11 @@
+framework module Smile_Identity_SDK {
+  umbrella header "Smile_Identity_SDK-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module Smile_Identity_SDK.Swift {
+    header "Smile_Identity_SDK-Swift.h"
+    requires objc
+}
